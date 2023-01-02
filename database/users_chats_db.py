@@ -22,11 +22,10 @@ class Database:
         )
 
 
-    def new_group(self, id, title, username):
+    def new_group(self, id, title):
         return dict(
             id = id,
             title = title,
-            username = username,
             chat_status=dict(
                 is_disabled=False,
                 reason="",
@@ -76,8 +75,6 @@ class Database:
     async def delete_user(self, user_id):
         await self.col.delete_many({'id': int(user_id)})
 
-    async def delete_chat(self, chat_id):
-        await self.grp.delete_many({'id': int(chat_id)})
 
     async def get_banned(self):
         users = self.col.find({'ban_status.is_banned': True})
@@ -88,8 +85,8 @@ class Database:
     
 
 
-    async def add_chat(self, chat, title, username):
-        chat = self.new_group(chat, title, username)
+    async def add_chat(self, chat, title):
+        chat = self.new_group(chat, title)
         await self.grp.insert_one(chat)
     
 
@@ -147,3 +144,6 @@ class Database:
 
 
 db = Database(DATABASE_URI, DATABASE_NAME)
+        
+
+    
